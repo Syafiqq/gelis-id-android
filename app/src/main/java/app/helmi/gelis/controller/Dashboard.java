@@ -3,6 +3,7 @@ package app.helmi.gelis.controller;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 import app.helmi.gelis.R;
 import app.helmi.gelis.model.custom.java.util.ObservableList;
 import app.helmi.gelis.model.orm.BannerOrm;
@@ -54,7 +55,9 @@ public class Dashboard extends AppCompatActivity
 
             @Override public void onFailure(Call<List<BannerOrm>> call, Throwable throwable)
             {
-                Log.e("Banner API", "Unable To get Banner Data", throwable);
+                String error = "Unable To get Banner Data";
+                Toast.makeText(Dashboard.this, error, Toast.LENGTH_SHORT).show();
+                Log.e("Banner API", error, throwable);
             }
         });
 
@@ -71,7 +74,9 @@ public class Dashboard extends AppCompatActivity
 
             @Override public void onFailure(Call<List<EventOrm>> call, Throwable throwable)
             {
-                Log.e("Event API", "Unable To get Event Data", throwable);
+                String error = "Unable To get Event Data";
+                Toast.makeText(Dashboard.this, error, Toast.LENGTH_SHORT).show();
+                Log.e("Event API", error, throwable);
             }
         });
     }
