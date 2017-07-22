@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 import app.helmi.gelis.R;
+import app.helmi.gelis.controller.adapter.BannerAdapter;
 import app.helmi.gelis.model.custom.java.util.ObservableList;
 import app.helmi.gelis.model.orm.BannerOrm;
 import app.helmi.gelis.model.orm.EventOrm;
@@ -13,6 +14,8 @@ import app.helmi.gelis.model.service.api.EventApi;
 import app.helmi.gelis.model.setting.constants.Network;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,6 +27,7 @@ public class Dashboard extends AppCompatActivity
 {
     ObservableList<BannerOrm> banners;
     ObservableList<EventOrm> events;
+    private BannerAdapter bannerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,6 +36,7 @@ public class Dashboard extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
 
         this.initializeProperties();
+        this.initializeAdapter();
         this.initializeData();
     }
 
@@ -77,6 +82,18 @@ public class Dashboard extends AppCompatActivity
                 String error = "Unable To get Event Data";
                 Toast.makeText(Dashboard.this, error, Toast.LENGTH_SHORT).show();
                 Log.e("Event API", error, throwable);
+            }
+        });
+    }
+
+    private void initializeAdapter()
+    {
+        this.bannerAdapter = (BannerAdapter) super.findViewById(R.id.activity_dashboard_adapter_banner_adapter);
+        this.banners.addObserver(new Observer()
+        {
+            @Override public void update(Observable observable, Object o)
+            {
+                Dashboard.this.bannerAdapter.setSource(((ObservableList<BannerOrm>) observable).getList()).startScroll();
             }
         });
     }
