@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Gelis</string>
+    <string name="title_activity_flyco_banner">FlycoBanner</string>
 </resources>
