@@ -51,20 +51,9 @@ public class RecycleView extends AppCompatActivity
         items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 7"));
         items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 8"));
         items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 9"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 10"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 11"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 12"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 13"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 14"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 15"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 16"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 17"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 18"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 19"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 20"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 21"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 22"));
-        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500659005-2017-07-21.jpg", "Gambar 23"));
+        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500656484-2017-07-21.jpg", "Gambar 10"));
+        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500656484-2017-07-21.jpg", "Gambar 11"));
+        items.add(new BannerItem("http://gelis.id/admin/geventbanner/1500656484-2017-07-21.jpg", "Gambar 12"));
 
         this.setProperties();
     }

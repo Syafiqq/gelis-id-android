@@ -2,19 +2,23 @@ package app.helmi.gelis;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
+import android.widget.Toast;
+import com.jakewharton.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import okhttp3.OkHttpClient;
 
 /**
  * This <CourierSelection> project created by :
@@ -28,11 +32,28 @@ public class VisibleAlternativeRecyclerViewAdapter extends RecyclerView.Adapter<
 {
     private final AppCompatActivity root;
     private final List<BannerItem> dataset;
+    private final Picasso picasso;
 
     public VisibleAlternativeRecyclerViewAdapter(AppCompatActivity root, List<BannerItem> objects)
     {
         this.dataset = objects;
         this.root = root;
+        Picasso.Builder builder = new Picasso.Builder(root.getApplicationContext())
+                .loggingEnabled(true)
+                .listener(new Picasso.Listener()
+                {
+                    @Override
+                    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception)
+                    {
+                        exception.printStackTrace();
+                    }
+                })
+                .downloader(new OkHttp3Downloader(new OkHttpClient.Builder()
+                        .connectTimeout(60, TimeUnit.SECONDS)
+                        .writeTimeout(60, TimeUnit.SECONDS)
+                        .readTimeout(120, TimeUnit.SECONDS)
+                        .build()));
+        this.picasso = builder.build();
     }
 
     @Override
@@ -47,28 +68,25 @@ public class VisibleAlternativeRecyclerViewAdapter extends RecyclerView.Adapter<
     public void onBindViewHolder(final SimpleViewHolder viewHolder, final int position)
     {
         final BannerItem alternative = this.dataset.get(position);
-        Context context = viewHolder.image.getContext();
-        //viewHolder.text.setText(alternative.getTitle());
-        System.out.println(Uri.parse(alternative.getImgUrl()));
-        ImageView iv = viewHolder.image;
+        this.picasso
+                .load(Uri.parse(alternative.getImgUrl().trim()))
+                .memoryPolicy(MemoryPolicy.NO_CACHE)
+                .memoryPolicy(MemoryPolicy.NO_STORE)
+                .networkPolicy(NetworkPolicy.NO_CACHE)
+                .networkPolicy(NetworkPolicy.NO_STORE)
+                .into(viewHolder.image, new Callback()
+                {
+                    @Override public void onSuccess()
+                    {
+                        viewHolder.text.setText(alternative.getTitle());
+                    }
 
-        iv.setScaleType(ImageView.ScaleType.FIT_XY);
+                    @Override public void onError()
+                    {
+                        Toast.makeText(root, "Error", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-        String imgUrl = alternative.imgUrl;
-
-        if(!TextUtils.isEmpty(imgUrl))
-        {
-            Glide.with(context)
-                 .load(imgUrl)
-                 .fitCenter()
-                 //.centerCrop()
-                 .placeholder(new ColorDrawable(Color.parseColor("#555555")))
-                 .into(iv);
-        }
-        else
-        {
-            iv.setImageDrawable(new ColorDrawable(Color.parseColor("#555555")));
-        }
     }
 
     private int getProgress(int value, int min, int max)
@@ -100,7 +118,7 @@ public class VisibleAlternativeRecyclerViewAdapter extends RecyclerView.Adapter<
 
         private void registerView(final View container)
         {
-            //this.text = container.findViewById(R.id.texttext);
+            this.text = container.findViewById(R.id.texttext);
             this.image = container.findViewById(R.id.imgimg);
         }
     }
