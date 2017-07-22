@@ -1,21 +1,27 @@
 package app.helmi.gelis.controller;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 import app.helmi.gelis.R;
 import app.helmi.gelis.controller.adapter.BannerAdapter;
+import app.helmi.gelis.controller.adapter.EventAdapter;
 import app.helmi.gelis.model.custom.java.util.ObservableList;
 import app.helmi.gelis.model.orm.BannerOrm;
 import app.helmi.gelis.model.orm.EventOrm;
 import app.helmi.gelis.model.service.api.BannerApi;
 import app.helmi.gelis.model.service.api.EventApi;
 import app.helmi.gelis.model.setting.constants.Network;
+import com.dgreenhalgh.android.simpleitemdecoration.linear.DividerItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,9 +31,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Dashboard extends AppCompatActivity
 {
-    ObservableList<BannerOrm> banners;
-    ObservableList<EventOrm> events;
+    private ObservableList<BannerOrm> banners;
+    private ObservableList<EventOrm> events;
     private BannerAdapter bannerAdapter;
+    private EventAdapter eventAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -89,11 +96,27 @@ public class Dashboard extends AppCompatActivity
     private void initializeAdapter()
     {
         this.bannerAdapter = (BannerAdapter) super.findViewById(R.id.activity_dashboard_adapter_banner_adapter);
+
+        final @NotNull RecyclerView recyclerView = (RecyclerView) super.findViewById(R.id.activity_dashboard_adapter_event_adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(super.getApplicationContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(ContextCompat.getDrawable(super.getApplicationContext(), R.drawable.divider)));
+        recyclerView.setItemAnimator(new FadeInRightAnimator());
+        this.eventAdapter = new EventAdapter(this, this.events.getList());
+        recyclerView.setAdapter(this.eventAdapter);
+
         this.banners.addObserver(new Observer()
         {
             @Override public void update(Observable observable, Object o)
             {
                 Dashboard.this.bannerAdapter.setSource(((ObservableList<BannerOrm>) observable).getList()).startScroll();
+            }
+        });
+
+        this.events.addObserver(new Observer()
+        {
+            @Override public void update(Observable observable, Object o)
+            {
+                Dashboard.this.eventAdapter.notifyDataSetChanged();
             }
         });
     }
